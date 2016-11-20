@@ -12,6 +12,15 @@ while 1:
 
     data = raw_input("What do you want to send ?\n")
 
+    if data == "JOINING":
+        data = "JOIN_CHATROOM:general\nCLIENT_IP:0\nPORT:0\nCLIENT_NAME:Sophie\n\n" 
+    elif data == "LEAVING":
+        data = "LEAVE_CHATROOM:0\nJOIN_ID:0\nCLIENT_NAME:Sophie\n\n"
+    elif data == "CHAT"
+        data = "CHAT:0\nJOIN_ID:0\nCLIENT_NAME:Sophie\nMESSAGE:HelloWorld\n\n"
+    elif data == "DISCONNECT"
+        data = "DISCONNECT:0\nPORT:0\nCLIENT_NAME:Sophie\n\n"
+
     client_socket.send(data + "\n")
     result = client_socket.recv(4096)
 
