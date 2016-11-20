@@ -4,6 +4,10 @@ from urlparse import urlparse, parse_qs
 import Queue
 import thread
 
+chatRoomsClients = {}
+chatRoomsNames = []
+clientNames = []
+
 def EchoClientThread(queue, port) :
 	while 1:
 	
@@ -21,15 +25,43 @@ def EchoClientThread(queue, port) :
 				print "*** Killing server"
 				client_socket.close()
 				os.kill(os.getpid(), signal.SIGINT)
+
 			elif (message[:4] == "HELO"):
 				message = message.rstrip()
 				message = message + "\nIP:46.101.193.203\nPort:8000\nStudentID:16336670\n"
 				client_socket.send(message)
+
+			elif ("JOIN_CHATROOM" in message):
+				infos = message.split("\n")
+				print infos
+				roomName = infos[0][15:]
+				ipServer = "46.101.193.203"
+				portServer = port
+				if (roomName in chatRoomsNames):
+					roomRef = chatRoomsNames.index(roomName)
+				else:
+					roomRef = len(chatRoomsNames)
+					chatRoomsNames.append(roomName)
+					chatRoomsClients[roomName] = []
+				clientName = infos[3][13:]
+				if not (clientName in clientNames):
+					clientId = len(clientNames)
+					clientNames.append(clientName)
+				else:
+					clientId = clientNames.index(clientName)
+				if not (clientId in chatRoomsClients[roomName]):
+					chatRoomsClients[roomName].append(clientId)
+				print roomName
+				print roomRef
+				print clientId
+
 			else:
 				message = message.upper().rstrip()
 				client_socket.send(message)
 				
+
 			message = client_socket.recv(4096)
+		
 		else:
 			client_socket.close()
 			return
