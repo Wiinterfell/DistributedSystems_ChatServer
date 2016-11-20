@@ -54,7 +54,9 @@ def EchoClientThread(queue, port) :
 				print roomName
 				print roomRef
 				print clientId
-
+				print clientName
+				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: 0\nPORT: 0\nROOM_REF: " + str(roomRef) + "JOIN_ID: " + str(clientId)
+				client_socket.send(result)
 			else:
 				message = message.upper().rstrip()
 				client_socket.send(message)
