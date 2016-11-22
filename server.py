@@ -109,7 +109,7 @@ def EchoClientThread(queue, port) :
 							result = "LEFT_CHATROOM: " + str(i) + "\nJOIN_ID: " + str(clientId) + "\n"
 							chatMessage = "CHAT: " + str(i) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + " left Chatroom\n\n"
 							messageToRoom(chatMessage, roomName)
-							client_socket.send(result)
+							#client_socket.send(result)
 							del chatRoomsClients[roomName][clientId]
 							found = True
 					del clientNames[clientId]
