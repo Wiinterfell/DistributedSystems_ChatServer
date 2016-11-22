@@ -86,7 +86,9 @@ def EchoClientThread(queue, port) :
 					client_socket.send(result)
 					break
 				result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
-				messageToRoom(result, roomName)
+				chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + "left Chatroom\n\n"
+				client_socket.send(result)
+				messageToRoom(chatMessage, roomName)
 				print len(chatRoomsClients[roomName])
 				if (realClientId in chatRoomsClients[roomName]):
 					del chatRoomsClients[roomName][realClientId]
