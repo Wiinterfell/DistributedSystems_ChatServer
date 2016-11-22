@@ -3,7 +3,6 @@ import sys, os, signal
 from urlparse import urlparse, parse_qs
 import Queue
 import thread
-import collections
 
 chatRoomsClients = {}
 chatRoomsNames = []
@@ -50,7 +49,7 @@ def EchoClientThread(queue, port) :
 				else:
 					roomRef = len(chatRoomsNames)
 					chatRoomsNames.append(roomName)
-					chatRoomsClients[roomName] = collections.OrderedDict()
+					chatRoomsClients[roomName] = {}
 				clientName = infos[3][13:]
 				if not (clientName in clientNames):
 					clientId = len(clientNames)
@@ -104,7 +103,7 @@ def EchoClientThread(queue, port) :
 				if (clientName in clientNames):
 					clientId = clientNames.index(clientName)
 					found = False
-					for i in chatRoomsClients:
+					for i in chatRoomsNames:
 						if  clientId in chatRoomsClients[i]:
 							roomRef = chatRoomsNames.index(i)
 							result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
