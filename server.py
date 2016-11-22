@@ -62,7 +62,7 @@ def EchoClientThread(queue, port) :
 				print roomRef
 				print clientId
 				print clientName
-				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: 0\nPORT: 0\nROOM_REF: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
+				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: " + ipServer + "\nPORT: " + portServer + "\nROOM_REF: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
 				messageToRoom(result, roomName)
 
 			elif ("LEAVE_CHATROOM" in message):
