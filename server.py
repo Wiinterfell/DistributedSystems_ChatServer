@@ -30,7 +30,6 @@ def EchoClientThread(queue, port) :
 			if ("KILL_SERVICE" in message):
 				client_socket.send("Server killed\n")
 				print "*** Killing server"
-				sleep(2)
 				client_socket.close()
 				os.kill(os.getpid(), signal.SIGINT)
 
