@@ -64,7 +64,7 @@ def EchoClientThread(queue, port) :
 				print clientName
 				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: " + str(ipServer) + "\nPORT: " + str(portServer) + "\nROOM_REF: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
 				chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: joined Chatroom\n\n"
-				client_socket.send(message)
+				client_socket.send(result)
 				messageToRoom(chatMessage, roomName)
 
 			elif ("LEAVE_CHATROOM" in message):
