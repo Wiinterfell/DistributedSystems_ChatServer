@@ -89,6 +89,8 @@ def EchoClientThread(queue, port) :
 				if (realClientId in chatRoomsClients[roomName]):
 					del chatRoomsClients[roomName][realClientId]
 					print len(chatRoomsClients[roomName])
+				else:
+					client_socket.send(result)
 				
 
 			elif ("DISCONNECT" in message):

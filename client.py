@@ -1,14 +1,16 @@
 import socket
 import sys
 
-while 1:
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     
-    try :
-        client_socket.connect((sys.argv[1], int(sys.argv[2])))
-    except :
-        print 'Unable to connect'
-        sys.exit()
+try :
+    client_socket.connect((sys.argv[1], int(sys.argv[2])))
+except:
+    print 'Unable to connect'
+    sys.exit()
+
+while 1:
 
     data = raw_input("What do you want to send ?\n")
 
