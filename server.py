@@ -8,6 +8,13 @@ chatRoomsClients = {}
 chatRoomsNames = []
 clientNames = []
 
+def messageToRoom(message, roomName):
+	for client in chatRoomsClients[roomName]:
+		print chatRoomsClients[roomName]
+		socket = chatRoomsClients[roomName][client]
+		socket.send(message)
+		print message
+
 def EchoClientThread(queue, port) :
 	while 1:
 	
@@ -56,7 +63,7 @@ def EchoClientThread(queue, port) :
 				print clientId
 				print clientName
 				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: 0\nPORT: 0\nROOM_REF: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
-				client_socket.send(result)
+				messageToRoom(result, roomName)
 
 			elif ("LEAVE_CHATROOM" in message):
 				infos = message.split("\n")
@@ -70,18 +77,19 @@ def EchoClientThread(queue, port) :
 					result = "ERROR: Client not recognized"
 					client_socket.send(result)
 					break
-				if roomRef in chatRoomsNames:
+				if roomRef < len(chatRoomsNames):
 					roomName = chatRoomsNames[roomRef]
 				else:
 					result = "ERROR: Unknown channel"
 					client_socket.send(result)
 					break
-
+				result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
+				messageToRoom(result, roomName)
+				print len(chatRoomsClients[roomName])
 				if (realClientId in chatRoomsClients[roomName]):
 					del chatRoomsClients[roomName][realClientId]
 					print len(chatRoomsClients[roomName])
-				result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
-				client_socket.send(result)
+				
 
 			elif ("DISCONNECT" in message):
 				infos = message.split("\n")
@@ -90,25 +98,52 @@ def EchoClientThread(queue, port) :
 					clientId = clientNames.index(clientName)
 					for i in chatRoomsClients:
 						if  clientId in chatRoomsClients[i]:
-							del chatRoomsClients[i][clientId]
 							roomRef = chatRoomsNames.index(i)
 							result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
-							client_socket.send(result)
+							messageToRoom(result, i)
+							del chatRoomsClients[i][clientId]
 					del clientNames[clientId]
 				else:
 					result = "ERROR: Client not recognized"
 					client_socket.send(result)
+
+			elif ("CHAT" in message):
+				infos = message.split("\n")
+				roomRef = infos[0][6:]
+				clientName = infos[2][13:]
+				clientMessage = infos[3][9:]
+				if clientName in clientNames:
+					realClientId = clientNames.index(clientName)
+				else:
+					result = "ERROR: Client not recognized"
+					client_socket.send(result)
+					break
+				print roomRef
+				print len(chatRoomsNames)
+				print roomRef <= len(chatRoomsNames)
+				print roomRef
+				print len(chatRoomsNames)
+				if roomRef < len(chatRoomsNames):
+					print "ok"
+					roomName = chatRoomsNames[roomRef]
+				else:
+					result = "ERROR: Unknown channel"
+					client_socket.send(result)
+					break
+				result = "CHAT: " + roomRef + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientMessage + "\n\n"
+				messageToRoom(result, roomName)
 
 			else:
 				message = message.upper().rstrip()
 				client_socket.send(message)
 				
 
+
 			message = client_socket.recv(4096)
 		
-		else:
-			client_socket.close()
-			return
+		#else:
+			#client_socket.close()
+			#return
 
 if __name__ == "__main__":
 	print "*** Creating server socket"
