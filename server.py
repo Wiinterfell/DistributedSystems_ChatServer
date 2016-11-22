@@ -109,7 +109,7 @@ def EchoClientThread(queue, port) :
 
 			elif ("CHAT" in message):
 				infos = message.split("\n")
-				roomRef = infos[0][6:]
+				roomRef = int(infos[0][6:])
 				clientName = infos[2][13:]
 				clientMessage = infos[3][9:]
 				if clientName in clientNames:
@@ -118,11 +118,6 @@ def EchoClientThread(queue, port) :
 					result = "ERROR: Client not recognized"
 					client_socket.send(result)
 					break
-				print roomRef
-				print len(chatRoomsNames)
-				print roomRef <= len(chatRoomsNames)
-				print roomRef
-				print len(chatRoomsNames)
 				if roomRef < len(chatRoomsNames):
 					print "ok"
 					roomName = chatRoomsNames[roomRef]
@@ -130,7 +125,7 @@ def EchoClientThread(queue, port) :
 					result = "ERROR: Unknown channel"
 					client_socket.send(result)
 					break
-				result = "CHAT: " + roomRef + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientMessage + "\n\n"
+				result = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientMessage + "\n\n"
 				messageToRoom(result, roomName)
 
 			else:
