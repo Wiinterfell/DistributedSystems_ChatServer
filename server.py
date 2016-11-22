@@ -64,6 +64,7 @@ def EchoClientThread(queue, port) :
 				print clientName
 				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: " + str(ipServer) + "\nPORT: " + str(portServer) + "\nROOM_REF: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
 				messageToRoom(result, roomName)
+				client_socket.send(message)
 
 			elif ("LEAVE_CHATROOM" in message):
 				infos = message.split("\n")
