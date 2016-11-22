@@ -3,6 +3,7 @@ import sys, os, signal
 from urlparse import urlparse, parse_qs
 import Queue
 import thread
+import collections
 
 chatRoomsClients = {}
 chatRoomsNames = []
@@ -49,7 +50,7 @@ def EchoClientThread(queue, port) :
 				else:
 					roomRef = len(chatRoomsNames)
 					chatRoomsNames.append(roomName)
-					chatRoomsClients[roomName] = {}
+					chatRoomsClients[roomName] = collections.OrderedDict()
 				clientName = infos[3][13:]
 				if not (clientName in clientNames):
 					clientId = len(clientNames)
@@ -63,7 +64,7 @@ def EchoClientThread(queue, port) :
 				print clientId
 				print clientName
 				result = "JOINED_CHATROOM: " + roomName + "\nSERVER_IP: " + str(ipServer) + "\nPORT: " + str(portServer) + "\nROOM_REF: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
-				chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + "joined Chatroom\n\n"
+				chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + " joined Chatroom\n\n"
 				client_socket.send(result)
 				messageToRoom(chatMessage, roomName)
 
@@ -86,7 +87,7 @@ def EchoClientThread(queue, port) :
 					client_socket.send(result)
 					break
 				result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
-				chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + "left Chatroom\n\n"
+				chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + " left Chatroom\n\n"
 				client_socket.send(result)
 				messageToRoom(chatMessage, roomName)
 				print len(chatRoomsClients[roomName])
@@ -107,9 +108,9 @@ def EchoClientThread(queue, port) :
 						if  clientId in chatRoomsClients[i]:
 							roomRef = chatRoomsNames.index(i)
 							result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
-							chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + "left Chatroom\n\n"
-							messageToRoom(chatMessage, i)
+							chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + " left Chatroom\n\n"
 							client_socket.send(result)
+							messageToRoom(chatMessage, i)
 							del chatRoomsClients[i][clientId]
 							found = True
 					del clientNames[clientId]
