@@ -103,18 +103,18 @@ def EchoClientThread(queue, port) :
 				if (clientName in clientNames):
 					clientId = clientNames.index(clientName)
 					found = False
-					for i in chatRoomsNames:
-						if  clientId in chatRoomsClients[i]:
-							roomRef = chatRoomsNames.index(i)
-							result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
-							chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + " left Chatroom\n\n"
-							messageToRoom(chatMessage, i)
+					for i in range (0, len(chatRoomsNames)):
+						if  clientId in chatRoomsClients[chatRoomsNames[i]]:
+							roomName = chatRoomsNames[i]
+							result = "LEFT_CHATROOM: " + str(i) + "\nJOIN_ID: " + str(clientId) + "\n"
+							chatMessage = "CHAT: " + str(i) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + " left Chatroom\n\n"
+							messageToRoom(chatMessage, roomName)
 							client_socket.send(result)
-							del chatRoomsClients[i][clientId]
+							del chatRoomsClients[roomName][clientId]
 							found = True
 					del clientNames[clientId]
 					if not(found):
-						client_socket.send(result)
+						result = "ERROR: Client not connected\n"
 				else:
 					result = "ERROR: Client not recognized\n"
 					client_socket.send(result)
