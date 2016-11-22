@@ -5,8 +5,8 @@ import Queue
 import thread
 
 chatRoomsClients = {}
-chatRoomsNames = []
-clientNames = []
+chatRoomsNames = {}
+clientNames = {}
 
 def messageToRoom(message, roomName):
 	for client in chatRoomsClients[roomName]:
@@ -48,12 +48,12 @@ def EchoClientThread(queue, port) :
 					roomRef = chatRoomsNames.index(roomName)
 				else:
 					roomRef = len(chatRoomsNames)
-					chatRoomsNames.append(roomName)
+					chatRoomsNames[roomRef] = roomName
 					chatRoomsClients[roomName] = {}
 				clientName = infos[3][13:]
 				if not (clientName in clientNames):
 					clientId = len(clientNames)
-					clientNames.append(clientName)
+					clientNames[clientId] = clientName
 				else:
 					clientId = clientNames.index(clientName)
 				if not (clientId in chatRoomsClients[roomName]):
