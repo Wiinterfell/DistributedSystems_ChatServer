@@ -44,18 +44,18 @@ def EchoClientThread(queue, port) :
 				roomName = infos[0][15:]
 				ipServer = "46.101.193.203"
 				portServer = port
-				if (roomName in chatRoomsNames):
-					roomRef = chatRoomsNames.index(roomName)
+				if roomName in chatRoomsNames.values():
+					roomRef = chatRoomsNames.keys()[chatRoomsNames.values().index(roomName)]
 				else:
 					roomRef = len(chatRoomsNames)
 					chatRoomsNames[roomRef] = roomName
 					chatRoomsClients[roomName] = {}
 				clientName = infos[3][13:]
-				if not (clientName in clientNames):
+				if not (clientName in clientNames.values()):
 					clientId = len(clientNames)
 					clientNames[clientId] = clientName
 				else:
-					clientId = clientNames.index(clientName)
+					clientId = clientNames.keys()[clientNames.values().index(clientName)]
 				if not (clientId in chatRoomsClients[roomName]):
 					chatRoomsClients[roomName][clientId] = client_socket
 				print roomName
@@ -73,8 +73,8 @@ def EchoClientThread(queue, port) :
 				clientId = int(infos[1][9:])
 				clientName = infos[2][13:]
 				print clientName
-				if clientName in clientNames:
-					realClientId = clientNames.index(clientName)
+				if clientName in clientNames.values():
+					realClientId = clientNames.keys()[clientNames.values().index(clientName)]
 				else:
 					result = "ERROR: Client not recognized\n"
 					client_socket.send(result)
@@ -100,10 +100,10 @@ def EchoClientThread(queue, port) :
 			elif ("DISCONNECT" in message):
 				infos = message.split("\n")
 				clientName = infos[2][13:]
-				if (clientName in clientNames):
-					clientId = clientNames.index(clientName)
+				if (clientName in clientNames.values()):
+					clientId = clientNames.keys()[clientNames.values().index(clientName)]
 					found = False
-					for i in range (0, len(chatRoomsNames)):
+					for i in chatRoomsNames:
 						if  clientId in chatRoomsClients[chatRoomsNames[i]]:
 							roomName = chatRoomsNames[i]
 							result = "LEFT_CHATROOM: " + str(i) + "\nJOIN_ID: " + str(clientId) + "\n"
@@ -124,8 +124,8 @@ def EchoClientThread(queue, port) :
 				roomRef = int(infos[0][6:])
 				clientName = infos[2][13:]
 				clientMessage = infos[3][9:]
-				if clientName in clientNames:
-					realClientId = clientNames.index(clientName)
+				if clientName in clientNames.values():
+					realClientId = clientNames.keys()[clientNames.values().index(clientName)]
 				else:
 					result = "ERROR: Client not recognized\n"
 					client_socket.send(result)
