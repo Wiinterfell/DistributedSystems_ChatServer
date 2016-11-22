@@ -98,13 +98,17 @@ def EchoClientThread(queue, port) :
 				clientName = infos[2][13:]
 				if (clientName in clientNames):
 					clientId = clientNames.index(clientName)
+					found = False
 					for i in chatRoomsClients:
 						if  clientId in chatRoomsClients[i]:
 							roomRef = chatRoomsNames.index(i)
 							result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId)
 							messageToRoom(result, i)
 							del chatRoomsClients[i][clientId]
+							found = True
 					del clientNames[clientId]
+					if not(found):
+						client_socket.send(result)
 				else:
 					result = "ERROR: Client not recognized"
 					client_socket.send(result)
