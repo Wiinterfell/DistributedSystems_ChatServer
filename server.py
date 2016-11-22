@@ -107,7 +107,9 @@ def EchoClientThread(queue, port) :
 						if  clientId in chatRoomsClients[i]:
 							roomRef = chatRoomsNames.index(i)
 							result = "LEFT_CHATROOM: " + str(roomRef) + "\nJOIN_ID: " + str(clientId) + "\n"
-							messageToRoom(result, i)
+							chatMessage = "CHAT: " + str(roomRef) + "\nCLIENT_NAME: " + clientName + "\nMESSAGE: " + clientName + "left Chatroom\n\n"
+							client_socket.send(result)
+							messageToRoom(chatMessage, i)
 							del chatRoomsClients[i][clientId]
 							found = True
 					del clientNames[clientId]
